@@ -12,13 +12,14 @@ export default class UserSetting extends UserModule {
         super(main, user);
 
         this.register(UserSetting, {
-            name: 'settings',
-            scope: 'user',
+            name: 'userSetting',
+            scope: {
+                group: 'user',
+                name: 'settings'
+            },
             requires: [],
             events: []
         });
-
-        if (this.user !== -1 && this.modules.mongodb.ready) this.getAll();
     }
 
     get data() {
@@ -52,18 +53,16 @@ export default class UserSetting extends UserModule {
         this._call = null;
     }
 
+    initScope() {
+        if (this.modules.mongodb.ready) this.getAll();
+        else this.modules.mongodb.on('ready', () => this.getAll());
+    }
+
     /**
      * @param {Object} update
      * @returns {Promise<void>}
      */
     async update(update) {
         this._data = await UserModel.updateUser(this.user.id, update);
-    }
-
-    /**
-     * Is not called when initiated for a server
-     */
-    setup() {
-        return true;
     }
 }
