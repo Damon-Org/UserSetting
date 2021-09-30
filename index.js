@@ -16,9 +16,7 @@ export default class UserSetting extends UserModule {
             scope: {
                 group: 'user',
                 name: 'settings'
-            },
-            requires: [],
-            events: []
+            }
         });
     }
 
